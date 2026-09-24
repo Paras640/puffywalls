@@ -232,7 +232,9 @@ export default function ExplorePage() {
         if (!user) {
             const currentCollections = loadLocalCollections();
             const collection = currentCollections[collectionName] || [];
-            if (collection.some((item) => item.id === selectedWallpaperForSave.id)) {
+            
+            const currentId = String(selectedWallpaperForSave.id || selectedWallpaperForSave.wallpaperId);
+            if (collection.some((item) => String(item.id || item.wallpaperId) === currentId)) {
                 toast.error(`Already saved to ${collectionName}`);
                 return;
             }
@@ -250,7 +252,8 @@ export default function ExplorePage() {
             return;
         }
 
-        const existing = targetCollection.wallpapers?.some((item) => item.wallpaperId === selectedWallpaperForSave.id);
+        const currentId = String(selectedWallpaperForSave.id || selectedWallpaperForSave.wallpaperId);
+        const existing = targetCollection.wallpapers?.some((item) => String(item.wallpaperId || item.id) === currentId);
         if (existing) {
             toast.error(`Already saved to ${collectionName}`);
             return;
@@ -259,7 +262,7 @@ export default function ExplorePage() {
         const updatedWallpapers = [
             ...(targetCollection.wallpapers || []),
             {
-                wallpaperId: selectedWallpaperForSave.id,
+                wallpaperId: currentId,
                 addedAt: new Date().toISOString(),
                 metadata: selectedWallpaperForSave,
             },
@@ -300,6 +303,8 @@ export default function ExplorePage() {
             return;
         }
 
+        const currentId = String(selectedWallpaperForSave.id || selectedWallpaperForSave.wallpaperId);
+
         if (collections.some((collection) => collection.name === trimmed)) {
             toast.error('A collection with this name already exists.');
             return;
@@ -311,14 +316,14 @@ export default function ExplorePage() {
                 name: trimmed,
                 wallpapers: [
                     {
-                        wallpaperId: selectedWallpaperForSave.id,
+                        wallpaperId: currentId,
                         addedAt: new Date().toISOString(),
                         metadata: selectedWallpaperForSave,
                     },
                 ],
             });
 
-            logEngagement({ userId: user.uid, eventType: 'create_collection_and_save', metadata: { wallpaperId: selectedWallpaperForSave.id, collectionName: trimmed } });
+            logEngagement({ userId: user.uid, eventType: 'create_collection_and_save', metadata: { wallpaperId: currentId, collectionName: trimmed } });
             setCollections((prev) => [created, ...prev]);
             setCollectionNames((prev) => [created.name, ...prev]);
             setNewCollectionName('');

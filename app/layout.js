@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import AuthProvider from '../lib/AuthContext';
 import { ShareModalProvider } from '../lib/ShareModalContext';
 import { Toaster } from 'sonner';
+import ServiceWorkerBootstrap from '../components/ServiceWorkerBootstrap';
 
 // the metaData export is coming from public folder as all the icon files are there only
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <ServiceWorkerBootstrap />
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ShareModalProvider>
