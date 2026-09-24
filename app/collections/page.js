@@ -169,6 +169,13 @@ export default function Collections() {
 
             const data = await response.json();
 
+            if (response.status === 401) {
+                // Token expired — clear it so the user is prompted to re-login
+                localStorage.removeItem("gdrive_access_token");
+                toast.error("Google Drive access expired. Please sign out and sign back in to re-authorize.", { id: toastId });
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error(data.message || "Failed directory synchronization.");
             }

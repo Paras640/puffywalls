@@ -137,6 +137,24 @@ export async function POST(request) {
 
     } catch (error) {
         console.error("Critical Google Drive upload exception:", error);
+
+        // Detect expired or revoked OAuth token (Google returns 401 Invalid Credentials)
+        const status = error?.response?.status || error?.code;
+        const isAuthError =
+            status === 401 ||
+            status === 403 ||
+            error?.message?.toLowerCase().includes('invalid_grant') ||
+            error?.message?.toLowerCase().includes('invalid credentials') ||
+            error?.message?.toLowerCase().includes('token') ||
+            error?.message?.toLowerCase().includes('unauthorized');
+
+        if (isAuthError) {
+            return NextResponse.json(
+                { message: "Google access token expired or revoked. Please sign out and sign back in to re-authorize Drive access.", error: error.message },
+                { status: 401 }
+            );
+        }
+
         return NextResponse.json(
             { message: "Internal server error during Google Drive transmission.", error: error.message },
             { status: 500 }
