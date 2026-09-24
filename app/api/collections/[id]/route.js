@@ -44,10 +44,11 @@ export async function PUT(request, { params }) {
 
     await dbConnect();
 
-    // Find and update the collection. 
+    // Find and update the collection.
     // { new: true } returns the modified document rather than the original.
-    // { runValidators: true } ensures the payload adheres to the Mongoose Schema rules.
-    const collection = await Collection.findByIdAndUpdate(id, body, { new: true, runValidators: true }).lean();
+    // Note: runValidators is omitted here to support $push and other MongoDB operators
+    // which don't play well with Mongoose's runValidators in nested array contexts.
+    const collection = await Collection.findByIdAndUpdate(id, body, { new: true }).lean();
 
     if (!collection) {
       return NextResponse.json({ error: 'Collection not found' }, { status: 404 });
