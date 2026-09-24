@@ -11,9 +11,9 @@ const withPWA = withPWAInit({
   disable: shouldDisablePwa,
 });
 
-// 2. Define your base Next.js configuration options
 const nextConfig = {
   /* Core configuration options go here */
+  turbopack: {},
   images: {
     remotePatterns: [
       {
