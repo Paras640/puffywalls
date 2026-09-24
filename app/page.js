@@ -473,7 +473,7 @@ export default function Page() {
                     <div className="collection-modal-card" onClick={(e) => e.stopPropagation()}>
                         <div className="collection-modal-header">
                             <h2>Save to Collection</h2>
-                            <p>Choose an existi0ng collection or create a new one</p>
+                            <p>Choose an existing collection or create a new one</p>
                         </div>
                         <div className="collection-list">
                             {collectionNames.length > 0 ? (

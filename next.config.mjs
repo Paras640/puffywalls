@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 import withPWAInit from "@ducanh2912/next-pwa";
 
-const shouldDisablePwa = true;
-
 // 1. Initialize the PWA builder with optimized mobile configurations
 const withPWA = withPWAInit({
-  dest: "public",
-  register: false,
-  skipWaiting: false,
-  disable: shouldDisablePwa,
+  dest: "public",                      // Where the compiled service worker files (sw.js) will be saved
+  register: true,                      // Automatically injects the service worker registration script into HTML headers
+  skipWaiting: true,                   // Forces the new service worker to take control immediately when an update is found
+  disable: false, // PWA explicitly enabled as requested
 });
 
 const nextConfig = {
